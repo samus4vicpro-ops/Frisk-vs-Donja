@@ -40,6 +40,7 @@ function collision.drawHitbox(x, y, w, h, scale, factor)
     local hx = x + (rw - hw) * 0.5
     local hy = y + (rh - hh) * 0.5
 
+    -- dibujar hitbox
     love.graphics.setColor(1, 0, 0)
     love.graphics.rectangle("line", hx, hy, hw, hh)
     love.graphics.setColor(1, 1, 1)
