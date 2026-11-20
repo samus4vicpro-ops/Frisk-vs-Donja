@@ -7,9 +7,12 @@ function collision.abba(ax, ay, aw, ah, bx, by, bw, bh)
 end
 
 function collision.hit(ax, ay, aw, ah, scaleA, factorA, bx, by, bw, bh, scaleB, factorB)
+    scaleA  = scaleA  or 1
+    scaleB  = scaleB  or 1
     factorA = factorA or 1
     factorB = factorB or 1
 
+    -- A
     local rwA = aw * scaleA
     local rhA = ah * scaleA
     local wA  = rwA * factorA
@@ -17,6 +20,7 @@ function collision.hit(ax, ay, aw, ah, scaleA, factorA, bx, by, bw, bh, scaleB, 
     local xA  = ax + (rwA - wA) * 0.5
     local yA  = ay + (rhA - hA) * 0.5
 
+    -- B
     local rwB = bw * scaleB
     local rhB = bh * scaleB
     local wB  = rwB * factorB
@@ -40,10 +44,45 @@ function collision.drawHitbox(x, y, w, h, scale, factor)
     local hx = x + (rw - hw) * 0.5
     local hy = y + (rh - hh) * 0.5
 
-    -- dibujar hitbox
     love.graphics.setColor(1, 0, 0)
     love.graphics.rectangle("line", hx, hy, hw, hh)
     love.graphics.setColor(1, 1, 1)
+end
+
+-- Detecta si un sprite CENTRADO en (x, y) está COMPLETAMENTE fuera de la ventana
+function collision.outOfWindow(x, y, w, h, scale, factor)
+    scale  = scale  or 1
+    factor = factor or 1
+
+    local hw = w * scale * factor
+    local hh = h * scale * factor
+
+    local left   = x - hw * 0.5
+    local right  = x + hw * 0.5
+    local top    = y - hh * 0.5
+    local bottom = y + hh * 0.5
+
+    local screenW, screenH = love.graphics.getDimensions()
+
+    return right < 0 or left > screenW or bottom < 0 or top > screenH
+end
+
+-- Detecta si un sprite CENTRADO en (x, y) toca o se sale de algún borde de la ventana
+function collision.partiallyOutOfWindow(x, y, w, h, scale, factor)
+    scale  = scale  or 1
+    factor = factor or 1
+
+    local hw = w * scale * factor
+    local hh = h * scale * factor
+
+    local left   = x - hw * 0.5
+    local right  = x + hw * 0.5
+    local top    = y - hh * 0.5
+    local bottom = y + hh * 0.5
+
+    local screenW, screenH = love.graphics.getDimensions()
+
+    return left < 0 or right > screenW or top < 0 or bottom > screenH
 end
 
 return collision
